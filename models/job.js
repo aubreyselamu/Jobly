@@ -46,12 +46,12 @@ class Job {
             title,
             salary,
             equity,
-            company_handle
+            company_handle AS companyHandle
         FROM jobs
         ORDER BY title`)
 
-    const jobs = result.rows[0];
-    return jobs
+    
+    return result.rows
   }
 
     /** Given a job id, return data about job.
@@ -103,27 +103,27 @@ class Job {
    * Throws NotFoundError if not found.
    */
 
-       static async update(id, data) {
-        const { setCols, values } = sqlForPartialUpdate(
-            data,
-            {});
-        const idVarIdx = "$" + (values.length + 1);
+    static async update(id, data) {
+    const { setCols, values } = sqlForPartialUpdate(
+        data,
+        {});
+    const idVarIdx = "$" + (values.length + 1);
     
-        const querySql = `UPDATE jobs 
-                          SET ${setCols} 
-                          WHERE id = ${idVarIdx} 
-                          RETURNING id, 
-                                    title, 
-                                    salary, 
-                                    equity,
-                                    company_handle AS "companyHandle"`;
-        const result = await db.query(querySql, [...values, id]);
-        const job = result.rows[0];
+    const querySql = `UPDATE jobs 
+                        SET ${setCols} 
+                        WHERE id = ${idVarIdx} 
+                        RETURNING id, 
+                                title, 
+                                salary, 
+                                equity,
+                                company_handle AS "companyHandle"`;
+    const result = await db.query(querySql, [...values, id]);
+    const job = result.rows[0];
     
-        if (!job) throw new NotFoundError(`No job: ${id}`);
+    if (!job) throw new NotFoundError(`No job: ${id}`);
     
-        return job;
-      }
+    return job;
+    }
 
 
     /** Delete given company from database; returns undefined.
@@ -140,8 +140,7 @@ class Job {
         const job = result.rows[0];
     
         if (!job) throw new NotFoundError(`No job: ${id}`);
-      }
-      
+      } 
 }
 
 module.exports = Job;
