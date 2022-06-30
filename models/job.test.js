@@ -61,7 +61,7 @@ describe("get", function () {
 describe("findAll", function () {
   test("works: no filter", async function () {
     let jobs = await Job.findAll();
-    expect(jobs).toBe([
+    expect(jobs).toEqual([
       {
         id: testJobIds[0],
         title: "Job1",
